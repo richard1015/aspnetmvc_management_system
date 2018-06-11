@@ -1,0 +1,730 @@
+﻿<div class="row wrapper wrapper-content">
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h5>
+                基层高血压用药参考方案</h5>
+        </div>
+        <div class="ibox-content">
+            <form id="frm_search" class="form-horizontal">
+            <div class="form-group">
+                <label class="col-md-1 control-label">
+                    程度</label>
+                <div class="col-md-3">
+                    <select class="form-control" id="level" name="level">
+                        <option value="" selected>请选择..</option>
+                        <option value="低危">低危</option>
+                        <option value="中危">中危</option>
+                        <option value="高危">高危</option>
+                    </select>
+                </div>
+                <label class="col-md-1 control-label">
+                    类别</label>
+                <div class="col-md-3">
+                    <select class="form-control" id="category" name="category">
+                        <option value="" selected>请选择..</option>
+                        <option value="1">种类一</option>
+                        <option value="2">种类二</option>
+                    </select>
+                </div>
+                <label class="col-md-1 control-label">
+                    查询</label>
+                <div class="col-md-2">
+                    <input type="text" class="form-control" name="search">
+                </div>
+                <div class="col-md-1">
+                    <button class="btn btn-md btn-primary" id="query">
+                        查询</button>
+                </div>
+            </div>
+            </form>
+            <div class="hr-line-dashed">
+            </div>
+            <div class="row">
+                <h5 class="col-md-11">
+                    方案</h5>
+                <div class="col-md-1">
+                    <a class="btn btn-xs btn-primary col-md-10" onclick="createProjectModelShow()">新建</a></div>
+            </div>
+            <table id="project_table" class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th style="width: 15%">
+                            程度
+                        </th>
+                        <th style="width: 35%">
+                            方案内容
+                        </th>
+                        <th style="width: 15%">
+                            方案类型
+                        </th>
+                        <th style="width: 20%">
+                            使用药典
+                        </th>
+                        <th style="width: 15%">
+                            明细
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+            <div id="detailHide" style="visibility: hidden">
+                <div class="row">
+                    <h5 class="col-md-11">
+                        明细</h5>
+                    <div class="col-md-1">
+                        <a class="btn btn-xs btn-primary col-md-10" onclick="createDetailModelShow()">新建</a></div>
+                </div>
+                <div class="row">
+                    <table id="usage_table" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="width: 20%">
+                                    药品名称
+                                </th>
+                                <th style="width: 40%">
+                                    使用剂量
+                                </th>
+                                <th style="width: 30%">
+                                    使用方法
+                                </th>
+                                <th style="width: 10%">
+                                    修改
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal inmodal fade" id="model_projectcreate" tabindex="-1" role="dialog"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">
+                    新建</h4>
+            </div>
+            <div class="modal-body">
+                <form id="frm_projectcreate" class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        程度</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" name="BPLevel">
+                            <option value="低危">低危</option>
+                            <option value="中危">中危</option>
+                            <option value="高危">高危</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        方案内容</label>
+                    <div class="col-sm-10">
+                        <input placeholder="暂未填写" type="text" name="ProjectContent" class="form-control"></div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        方案类型</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" name="ProjectCode">
+                            <option value="1">种类一</option>
+                            <option value="2">种类二</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        使用药典</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" name="EvalGuidId">
+                            <option value="1">中国高血压防治指南2010</option>
+                            <option value="2">中国国家基层管理指南2014</option>
+                            <option value="3">2013ESH-ESC动脉高血压管理指南</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">
+                        关闭</button>
+                    <button type="button" class="ladda-button btn btn-primary" id="btn_projectsubmit"
+                        data-style="zoom-in">
+                        保存</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal inmodal fade" id="model_detailcreate" tabindex="-1" role="dialog"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">
+                    新建</h4>
+            </div>
+            <div class="modal-body">
+                <form id="frm_detailcreate" class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        药品名称</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="CommonName" class="form-control"></div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        使用剂量</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="Dose" class="form-control"></div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        使用方法</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="Usage" class="form-control"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">
+                        关闭</button>
+                    <button type="button" class="ladda-button btn btn-primary" data-style="zoom-in" id="btn_detailsubmit">
+                        保存</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal inmodal fade" id="model_detail" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">
+                    修改</h4>
+            </div>
+            <div class="modal-body">
+                <form id="frm_detailupdate" class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        药品名称</label>
+                    <div class="col-sm-10">
+                        <input id="update_commonname" type="text" name="CommonName" class="form-control"></div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        使用剂量</label>
+                    <div class="col-sm-10">
+                        <input id="update_dose" type="text" name="Dose" class="form-control"></div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        使用方法</label>
+                    <div class="col-sm-10">
+                        <input id="update_usage" type="text" name="Usage" class="form-control"></div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                    </label>
+                    <div class="col-sm-10">
+                        <input id="update_detailprojectid" type="hidden" name="ProjectId" class="form-control"></div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                    </label>
+                    <div class="col-sm-10">
+                        <input id="update_id" type="hidden" name="ID" class="form-control"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">
+                        关闭</button>
+                    <button type="button" class="btn btn-primary" onclick="updateDetailSubmit()">
+                        修改</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal inmodal fade" id="model_project" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">
+                    修改</h4>
+            </div>
+            <div class="modal-body">
+                <form id="frm_projectupdate" class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        程度</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" id="update_bplevel" name="BPLevel">
+                            <option value="低危">低危</option>
+                            <option value="中危">中危</option>
+                            <option value="高危">高危</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        方案内容</label>
+                    <div class="col-sm-10">
+                        <input id="update_projectcontent" type="text" name="ProjectContent" class="form-control"></div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        方案类型</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" id="update_projectcode" name="ProjectCode">
+                            <option value="1">种类一</option>
+                            <option value="2">种类二</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        使用药典</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" id="update_evalguid" name="EvalGuidId">
+                            <option value="1">中国高血压防治指南2010</option>
+                            <option value="2">中国国家基层管理指南2014</option>
+                            <option value="3">2013ESH-ESC动脉高血压管理指南</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                    </label>
+                    <div class="col-sm-10">
+                        <input id="update_projectid" type="hidden" name="ID" class="form-control"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">
+                        关闭</button>
+                    <button type="button" class="btn btn-primary" onclick="updateProjectSubmit()">
+                        修改</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section script {
+    <script>
+
+        var project_table, usage_table;
+        var project_table_filter = "";
+        var usage_table_filter = "";
+
+        
+
+       
+
+        $(document).ready(function () {
+
+            //方案表
+            project_table = $("#project_table").DataTable({
+                "pageLength": 5,
+                "lengthChange": false,
+                "processing": true,
+                "serverSide": true,
+                "ordering": false,
+                "dom": '< l < t > ip > ',
+                "ajax": function (tdata, callback, settings) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/SubMedicine/ProjectDetail" + project_table_filter,
+                        cache: false,
+                        data: tdata,
+                        dataType: "json",
+                        success: function (res) {
+                            if (res.result == 0) {
+                                toastr.warning(res.msg);
+                            } else if (res.result == 100) {
+                                location.href = "/Home/Index";
+                            } else if (res.result == 300) {
+                                location.href = "/Home/Illegal";
+                            } else {
+                                callback(res.data);
+                            }
+                        },
+                        error: function (XMLHttpRequest, txtStatus, errorThrown) {
+                            toastr.warning('查询失败，请重试');
+                        }
+                    });
+                },
+                "columns": [
+                    { data: "BPLevel" },
+                    { data: "ProjectContent" },
+                    { data: "ProjectCode" },
+                    { data: "EvalGuidId" },
+                    {
+                        data: "ID",
+                        "render": function (data, type, row) {
+                            var html;
+                            html = "<a class='btn btn-xs btn-primary' onclick='detailTableShow(" + data + ")'>细节</a>"; html += "&nbsp;<a class='btn btn-xs btn-primary' onclick='updateProjectModelShow(" + data + ")'>修改</a>";
+                            html += "&nbsp;<a class='btn btn-xs btn-danger'onclick='deleteProjectModelShow(" + data + ")' >删除</a>";
+                            return html;
+                        }
+                    }
+                ],
+                "language": {
+                    "sProcessing": "处理中...",
+                    "sLengthMenu": "每页显示 _MENU_ 项结果",
+                    "sZeroRecords": "没有匹配结果",
+                    "sInfo": "当前显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                    "sInfoEmpty": "当前显示第 0 至 0 项结果，共 0 项",
+                    "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                    "sInfoPostFix": "",
+                    "sSearch": "关键字搜索:",
+                    "sUrl": "",
+                    "sEmptyTable": "表中数据为空",
+                    "sLoadingRecords": "载入中...",
+                    "sInfoThousands": ",",
+                    "oPaginate": {
+                        "sFirst": "首页",
+                        "sPrevious": "上页",
+                        "sNext": "下页",
+                        "sLast": "末页"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": 以升序排列此列",
+                        "sSortDescending": ": 以降序排列此列"
+                    }
+                },
+                "buttons": []
+            })
+            //明细表
+            usage_table = $("#usage_table").DataTable({
+                "pageLength": 3,
+                "lengthChange": false,
+                "processing": true,
+                "serverSide": true,
+                "ordering": false,
+                "dom": '< l < t > ip > ',
+                "ajax": function (tdata, callback, settings) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/SubMedicine/UsageDetail" + usage_table_filter,
+                        cache: false,
+                        data: tdata,
+                        dataType: "json",
+                        success: function (res) {
+                            if (res.result == 0) {
+                                toastr.warning(res.msg);
+                            } else if (res.result == 100) {
+                                location.href = "/Home/Index";
+                            } else if (res.result == 300) {
+                                location.href = "/Home/Illegal";
+                            } else {
+                                callback(res.data);
+                            }
+                        },
+                        error: function (XMLHttpRequest, txtStatus, errorThrown) {
+                            toastr.warning('查询失败，请重试');
+                        }
+                    });
+                },
+                "columns": [
+                    { data: "CommonName" },
+                    { data: "Dose" },
+                    { data: "Usage" },
+                    {
+                        data: "ID",
+                        "render": function (data, type, row) {
+                            var html;
+                            html = "<a class='btn btn-xs btn-primary' onclick='updateDetailModelShow(" + data + ")'>修改</a>";
+                            html += "&nbsp;<a class='btn btn-xs btn-danger'onclick='deleteDetailModelShow(" + data + ")' >删除</a>";
+                            return html;
+                        }
+                    }
+                ],
+                "language": {
+                    "sProcessing": "处理中...",
+                    "sLengthMenu": "每页显示 _MENU_ 项结果",
+                    "sZeroRecords": "没有匹配结果",
+                    "sInfo": "当前显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                    "sInfoEmpty": "当前显示第 0 至 0 项结果，共 0 项",
+                    "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                    "sInfoPostFix": "",
+                    "sSearch": "关键字搜索:",
+                    "sUrl": "",
+                    "sEmptyTable": "表中数据为空",
+                    "sLoadingRecords": "载入中...",
+                    "sInfoThousands": ",",
+                    "oPaginate": {
+                        "sFirst": "首页",
+                        "sPrevious": "上页",
+                        "sNext": "下页",
+                        "sLast": "末页"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": 以升序排列此列",
+                        "sSortDescending": ": 以降序排列此列"
+                    }
+                },
+                "buttons": []
+            })
+
+        });
+
+        function createProjectModelShow() {
+            $("#model_projectcreate").modal('show');
+        }
+
+        function createDetailModelShow() {
+            $("#model_detailcreate").modal('show');
+        }
+
+        var ps = $('#btn_projectsubmit').ladda();
+        ps.click(function () {
+            ps.ladda('start');
+            $.post("/SubMedicine/ProjectCreate", $("#frm_projectcreate").serialize(), function (res) {
+            ps.ladda('stop');
+                if (res.result == 1) {
+                    toastr.success("增加成功");
+                    project_table.ajax.reload();
+                    $("#model_projectcreate").modal('hide');
+                    $("#model_projectcreate").on("hidden.bs.modal", function () {
+                        $("input").val("");
+                    });
+                } else if (res.result == 100) {
+                    location.href = "/Home/Index";
+                } else if (res.result == 300) {
+                    location.href = "/Home/Illegal";
+                } else {
+                    toastr.warning("增加失败");
+                }
+            })
+        });
+
+        var ps = $('#btn_detailsubmit').ladda();
+        ps.click(function () {
+            ps.ladda('start');
+            $.post("/SubMedicine/DetailCreate", $("#frm_detailcreate").serialize(), function (res) {
+                ps.ladda('stop');
+                if (res.result == 1) {
+                    toastr.success("增加成功");
+                    project_table.ajax.reload();
+                    usage_table.ajax.reload();
+                    $("#model_detailcreate").modal('hide');
+                    $("#model_detailcreate").on("hidden.bs.modal", function () {
+                        $("input").val("");
+                    });
+                } else if (res.result == 100) {
+                    location.href = "/Home/Index";
+                } else if (res.result == 300) {
+                    location.href = "/Home/Illegal";
+                } else {
+                    toastr.warning("增加失败");
+                }
+            })
+        });
+
+        //显示明细表
+        function detailTableShow(id) {
+            $("#detailHide").css('visibility', 'visible');
+            usage_table_filter = "?id=" + id;
+            usage_table.ajax.reload();
+        }
+
+        //查询明细表 并显示弹窗
+        function updateDetailModelShow(id) {
+            var status = 1;
+            $.post("/SubMedicine/DetailEdit/?id=" + id + "&status=" + status, null, function (res) {
+                if (res.result == 0) {
+                    toastr.warning("没有此条数据可供修改");
+                }
+                else if (res.result == 100) {
+                    location.href = "/Home/Index";
+                } else if (res.result == 300) {
+                    location.href = "/Home/Illegal";
+                } else {
+                    $("#update_commonname").val(res.data.CommonName);
+                    $("#update_dose").val(res.data.Dose);
+                    $("#update_usage").val(res.data.Usage);
+                    $("#update_detailprojectid").val(res.data.ProjectId)
+                    $("#update_id").val(res.data.ID);
+                }
+            })
+            $("#model_detail").modal('show');
+        }
+
+        //修改明细表 并隐藏弹窗 提交到服务器
+        function updateDetailSubmit() {
+            // todo ajax提交到服务器
+            var status = 0;
+            var id = $("#frm_detailupdate").serializeArray()[4]["value"];
+            $.post("/SubMedicine/DetailEdit/?id=" + id + "&status=" + status, $("#frm_detailupdate").serialize(), function (res) {
+                if (res.result == 1) {
+                    toastr.success("修改成功");
+                    usage_table.ajax.reload();
+                    project_table.ajax.reload();
+                    $("#model_detail").modal('hide');
+                }
+                else if (res.result == 100) {
+                    location.href = "/Home/Index";
+                } else if (res.result == 300) {
+                    location.href = "/Home/Illegal";
+                } else toastr.warning("修改失败");
+            })
+        }
+
+        //查询方案表 并显示弹窗
+        function updateProjectModelShow(id) {
+            var status = 1;
+            $.post("/SubMedicine/ProjectEdit/?id=" + id + "&status=" + status, null, function (res) {
+                if (res.result == 0) {
+                    toastr.warning("没有此条数据可供修改");
+                }
+                else if (res.result == 100) {
+                    location.href = "/Home/Index";
+                } else if (res.result == 300) {
+                    location.href = "/Home/Illegal";
+                } else {
+                    $("#update_bplevel").val(res.data.BPLevel);
+                    $("#update_projectcontent").val(res.data.ProjectContent);
+                    $("#update_projectcode").val(res.data.ProjectCode);
+                    $("#update_evalguid").val(res.data.EvalGuidId);
+                    $("#update_projectid").val(res.data.ID);
+                }
+            })
+            $("#model_project").modal('show');
+        }
+
+        //修改方案表 并隐藏弹窗 提交到服务器
+        function updateProjectSubmit() {
+            var status = 0;
+            var id = $("#frm_projectupdate").serializeArray()[4]["value"];
+            $.post("/SubMedicine/ProjectEdit/?id=" + id + "&status=" + status, $("#frm_projectupdate").serialize(), function (res) {
+                if (res.result == 1) {
+                    toastr.success("修改成功");
+                    project_table.ajax.reload();
+                    $("#model_project").modal('hide');
+                }
+                else if (res.result == 100) {
+                    location.href = "/Home/Index";
+                } else if (res.result == 300) {
+                    location.href = "/Home/Illegal";
+                } else toastr.warning("修改失败");
+            })
+
+        }
+
+        //************************
+        function deleteDetailModelShow(id) {
+            swal({
+                title: "确定删除吗?",
+                text: "删除后不可找回!",
+                type: "warning",
+                showCancelButton: true,
+                cancelButtonText: "放弃", //取消按钮
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "删了吧!", //确认按钮
+                closeOnConfirm: false
+            }, function () {
+                //表单提交
+                $.post("/SubMedicine/DetailDelete/?id=" + id, null, function (res) {
+                    if (res.result == 0) {
+                        swal("删除失败!", "没用可供删除的数据", "error");
+                    }
+                    else if (res.result == 100) {
+                        location.href = "/Home/Index";
+                    } else if (res.result == 300) {
+                        location.href = "/Home/Illegal";
+                    } else {
+                        usage_table.ajax.reload();
+                        project_table.ajax.reload();
+                        swal("已删除!", "此条信息已从数据库中移除", "success");
+                    }
+                })
+
+            });
+
+        }
+
+        function deleteProjectModelShow(id) {
+            swal({
+                title: "确定删除吗?",
+                text: "删除后不可找回!",
+                type: "warning",
+                showCancelButton: true,
+                cancelButtonText: "放弃", //取消按钮
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "删了吧!", //确认按钮
+                closeOnConfirm: false
+            }, function () {
+                //表单提交
+                $.post("/SubMedicine/ProjectDelete/?id=" + id, null, function (res) {
+                    if (res.result == 0) {
+                        swal("删除失败!", "没用可供删除的数据", "error");
+                    }
+                    else if (res.result == 100) {
+                        location.href = "/Home/Index";
+                    } else if (res.result == 300) {
+                        location.href = "/Home/Illegal";
+                    } else {
+                        usage_table.ajax.reload();
+                        project_table.ajax.reload();
+                        swal("已删除!", "此条信息已从数据库中移除", "success");
+                    }
+                })
+
+            });
+
+        }
+
+
+
+
+
+        function searchSubmit() {
+            // todo form必填项验证
+            // jquery.validate.min.js
+            //        var params = "GroupName=" + $("tpyes").val();
+
+            var array = $("#frm_search").serializeArray();
+            var type = array[0]["value"];
+            var detail = array[1]["value"];
+            filter = "?type=" + type + "&detail=" + detail;
+            table.ajax.reload();
+
+        }
+
+        function stringFilter(l, c, s) {
+            var level = l ? l : "";
+            var category = c ? c : "";
+            var search = s ? s : "";
+            project_table_filter = "?level=" + level + "&category=" + category + "&search=" + search;
+            project_table.ajax.reload();
+        }
+
+        $("#query").click(function () {
+            project_table_filter = "?" + $("#frm_search").serialize();
+            project_table.ajax.reload();
+            return false;
+        });
+
+        $("#level").change(function () {
+            level = $(this).children("option:selected").val();
+            category = $("#category").children("option:selected").val();
+            stringFilter(level, category, null);
+        });
+
+        $("#category").change(function () {
+            category = $(this).children("option:selected").val();
+            level = $("#level").children("option:selected").val();
+            stringFilter(level, category, null);
+        });
+
+    </script>
+}

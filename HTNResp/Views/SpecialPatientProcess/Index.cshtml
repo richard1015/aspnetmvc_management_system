@@ -1,0 +1,443 @@
+﻿@using HTNResp.Model
+<div class="row wrapper wrapper-content">
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h5>特殊人群高血压</h5>
+            <div class="ibox-tools">
+                <a class="btn btn-xs btn-primary" onclick="filter='';table.ajax.reload()">刷新</a>
+                <a class="btn btn-xs btn-primary" onclick="createModelShow()">新建</a>
+                <a class="btn btn-xs btn-primary" onclick="searchModelShow()">查询</a>
+            </div>
+            <div>
+            <p id="s"></p>
+           </div>
+        </div> 
+        <div class="ibox-content">
+            <table id="data_table" class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th style="width:20%">判断规则</th>
+                        <th style="width:15%">症状名称</th>                       
+                        <th style="width:30%">内容</th>
+                        <th style="width:15%">评估指南</th>
+                        <th style="width:10%">操作</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+<!--新建窗口-->
+<div class="modal inmodal fade" id="model_create" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">
+                    新建</h4>
+            </div>
+            <div class="modal-body">
+                <form id="frm_create" class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">判断规则</label>
+                        <div class="col-sm-10"><textarea style="height:80px;overflow:auto" type="text" id="create_DecisionRule" name="DecisionRule" class="form-control"required></textarea></div>
+                    </div>
+                     <div class="form-group">
+                        <label class="col-sm-2 control-label">症状名称</label>
+                        <div class="col-sm-10"><input type="text" name="SymptomName" class="form-control"required></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">内容</label>
+                        <div class="col-sm-10"><textarea style="height:80px;overflow:auto" name="Contents" class="form-control"required></textarea></div>
+                    </div>                  
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">评估指南</label>
+                        <div class="col-sm-10">
+                        <select  name="EvalGuidId" class="form-control" required>
+                            <option value=""></option>
+                            <option value="1">中国高血压防治指南2010</option>
+                            <option value="2">中国国家基层管理指南2014</option>
+                            <option value="3">2013ESH-ESC动脉高血压管理指南</option>
+                        </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                <a type="button" class="btn btn-primary" id="btn_add">保存</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--修改窗口-->
+<div class="modal inmodal fade" id="model_update" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">
+                    修改</h4>
+            </div>
+            <div class="modal-body">
+                <form id="frm_update" class="form-horizontal">
+                  <div class="form-group">
+                        <label class="col-sm-2 control-label"></label>
+                        <div class="col-sm-10"><input type="hidden" id="update_id"name="ID" class="form-control"required></div>
+                    </div>
+                   <div class="form-group">
+                        <label class="col-sm-2 control-label">判断规则</label>
+                        <div class="col-sm-10"><textarea style="height:80px;overflow:auto" type="text" id="update_decisionrule"name="DecisionRule" class="form-control"required></textarea></div>
+                    </div>
+                     <div class="form-group">
+                        <label class="col-sm-2 control-label">症状名称</label>
+                        <div class="col-sm-10"><input type="text" id="update_symptomname"name="SymptomName" class="form-control"required></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">内容</label>
+                        <div class="col-sm-10"><textarea style="height:60px;overflow:auto" id="update_contents"name="Contents" class="form-control"required></textarea></div>
+                    </div>
+                     <div class="form-group">
+                        <label class="col-sm-2 control-label" style="font-size: medium"></label>
+                        <div class="col-sm-10"><input id="update_status"type="hidden" name="Status" value="1"class="form-control"></div>
+                    </div>                            
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">评估指南</label>
+                        <div class="col-sm-10">
+                        <select  id="update_evalguidid"name="EvalGuidId" class="form-control" required>
+                            <option value=""></option>
+                            <option value="1">中国高血压防治指南2010</option>
+                            <option value="2">中国国家基层管理指南2014</option>
+                            <option value="3">2013ESH-ESC动脉高血压管理指南</option>
+                        </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                <a type="button" class="btn btn-primary" id="btn_modify">保存</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--查找窗口-->
+<div class="modal inmodal fade" id="model_search" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">
+                    查询</h4>
+            </div>
+            <div class="modal-body">
+                <form id="frm_search" class="form-horizontal">
+                 <div class="form-group">
+                        <label class="col-sm-2 control-label">判断规则</label>
+                        <div class="col-sm-10"><textarea style="height:80px;overflow:auto" type="text" name="DecisionRule" class="form-control"required></textarea></div>
+                    </div>
+                     <div class="form-group">
+                        <label class="col-sm-2 control-label">症状名称</label>
+                        <div class="col-sm-10"><input type="text" name="SymptomName" class="form-control"required></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">内容</label>
+                        <div class="col-sm-10"><textarea style="height:80px;overflow:auto" type="text" name="Contents" class="form-control"required></textarea></div>
+                    </div>
+                                                    
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">评估指南</label>
+                        <div class="col-sm-10">
+                        <select name="EvalGuidId" class="form-control" required>
+                            <option value=""></option>
+                            <option value="1">中国高血压防治指南2010</option>
+                            <option value="2">中国国家基层管理指南2014</option>
+                            <option value="3">2013ESH-ESC动脉高血压管理指南</option>
+                        </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="searchSubmit()">查找</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@{
+    List<EvalGuid> evalGridList = ViewBag.EvalGridId;
+    List<string> evalGridListJs = new List<string>();
+    foreach(EvalGuid eval in evalGridList)
+    {
+        evalGridListJs.Add("'" + eval.ID + "':'" + eval.GuidName + "'");
+    }
+    
+}
+
+@section script {
+<script>
+    var evalGridList = {@Html.Raw(string.Join(",", evalGridListJs))};
+</script>
+<script>
+    var filter = " ";
+    var table = null;
+
+    $("#create_DecisionRule").change(function () {
+        $.post("/SpecialPatientProcess/Confirm?string=" + $("#create_DecisionRule").val(), null, function (res) {
+            if (res.result == 1) {
+                $("#create_DecisionRule").css("border-color", "")
+            } else if (res.result == 100) {
+                location.href = "/Home/Index";
+            } else if (res.result == 300) {
+                location.href = "/Home/Illegal";
+            } else {
+                toastr.error(res.msg);
+                $("#create_DecisionRule").css("border-color", "red")
+                return 1;
+            }
+        });
+    });
+
+    $("#update_decisionrule").change(function () {
+        $.post("/SpecialPatientProcess/Confirm?string=" + $("#update_decisionrule").val(), null, function (res) {
+            if (res.result == 1) {
+                $("#update_decisionrule").css("border-color", "")
+            } else if (res.result == 100) {
+                location.href = "/Home/Index";
+            } else if (res.result == 300) {
+                location.href = "/Home/Illegal";
+            } else {
+                toastr.error(res.msg);
+                $("#update_decisionrule").css("border-color", "red")
+                return 1;
+            }
+        });
+    });
+
+    $.extend($.validator.messages, { required: '该项不能为空' });
+
+    $(document).ready(function () {
+        table = $("#data_table").DataTable({
+            "pageLength": 10,
+            "lengthChange": false,
+            "processing": true,
+            "serverSide": true,
+            "ordering": false,
+            "dom": '<"html5buttons"B>Tgitp',
+            "ajax": function (tdata, callback, settings) {
+                $.ajax({
+                    type: "POST",
+                    url: "/SpecialPatientProcess/AjaxList/" + filter,
+                    cache: false,
+                    data: tdata,
+                    dataType: "json",
+                    success: function (res) {
+                        if (res.result == 0) {
+                            toastr.warning(res.msg);
+                        } else if (res.result == 100) {
+                            location.href = "/Home/Index";
+                        } else if (res.result == 300) {
+                            location.href = "/Home/Illegal";
+                        } else {
+                            callback(res.data);
+                        }
+                    },
+                    error: function (XMLHttpRequest, txtStatus, errorThrown) {
+                        toastr.warning('查询失败，请重试');
+                    }
+                });
+            },
+            "columns": [
+                    { data: "DecisionRule" },
+                    { data: "SymptomName" },
+                    { data: "Contents",
+                        "render": function (data, type, row) {
+                            var html;
+                            html = "<div style='height:100px;overflow:auto'>" + data + "</div>";
+                            return html;
+                        } 
+                    },
+            //{ data: "Measure" },
+                    {
+                    data: "EvalGuidId",
+                    "render": function (data, type, row) {
+                        return evalGridList[data];
+                    }
+                },
+                    {
+                        data: "ID",
+                        "render": function (data, type, row) {
+                            var html;
+                            html = "<a class='btn btn-xs btn-primary' onclick='updateModelShow(" + data + ")'>修改</a>";
+                            html += "&nbsp;<a class='btn btn-xs btn-danger'onclick='deleteModelShow(" + data + ")' >删除</a>";
+                            return html;
+                        }    
+                    }
+                ],
+            "language": {
+                "sProcessing": "处理中...",
+                "sLengthMenu": "每页显示 _MENU_ 项结果",
+                "sZeroRecords": "没有匹配结果",
+                "sInfo": "当前显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                "sInfoEmpty": "当前显示第 0 至 0 项结果，共 0 项",
+                "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                "sInfoPostFix": "",
+                "sSearch": "关键字搜索:",
+                "sUrl": "",
+                "sEmptyTable": "表中数据为空",
+                "sLoadingRecords": "载入中...",
+                "sInfoThousands": ",",
+                "oPaginate": {
+                    "sFirst": "首页",
+                    "sPrevious": "上页",
+                    "sNext": "下页",
+                    "sLast": "末页"
+                },
+                "oAria": {
+                    "sSortAscending": ": 以升序排列此列",
+                    "sSortDescending": ": 以降序排列此列"
+                }
+            },
+            "buttons": []
+        })
+        $("#frm_create").validate({});
+        $("#frm_update").validate({});
+    });
+
+    function createModelShow() {
+
+        $("#model_create").modal('show');
+    }
+
+    var btn_add = $('#btn_add').ladda();
+    btn_add.click(function () {
+        if (!$("#frm_create").valid()) {
+            toastr.error("新建失败！");
+            return false;
+        }
+        btn_add.ladda('start');
+        $.post("/SpecialPatientProcess/Create", $("#frm_create").serialize(), function (res) {
+            btn_add.ladda('stop');
+            if (res.result == 1) {
+                table.ajax.reload();
+                $("#model_create").modal('hide');
+                toastr.success("新建成功!");
+                $("#model_create").on("hidden.bs.modal", function () {
+                    $("input,select").val("");
+                });
+            } else if (res.result == 100) {
+                location.href = "/Home/Index";
+            } else if (res.result == 300) {
+                location.href = "/Home/Illegal";
+            } else {
+                toastr.error(res.msg);
+            }
+        })
+    });
+
+
+    function updateModelShow(id) {
+        $.post("/SpecialPatientProcess/Info/" + id, null, function (res) {
+            console.log(data);
+            if (res.result == 0) {
+                toastr.error("所选择项不存在,请刷新后重试");
+            } else if (res.result == 100) {
+                location.href = "/Home/Index";
+            } else if (res.result == 300) {
+                location.href = "/Home/Illegal";
+            }
+            else {
+                $("#update_id").val(res.data.ID);
+                $("#update_decisionrule").val(res.data.DecisionRule);
+                $("#update_symptomname").val(res.data.SymptomName);
+                $("#update_contents").val(res.data.Contents);
+                $("#update_status").val(res.data.Status);
+                $("#update_evalguidid").val(res.data.EvalGuidId);
+            }
+        })
+        $("#model_update").modal('show');
+    }
+
+    var btn_modify = $('#btn_modify').ladda();
+    btn_modify.click(function () {
+        if (!$("#frm_update").valid()) {
+            toastr.error("修改失败！");
+            return false;
+        }
+        btn_modify.ladda('start');
+        $.post("/SpecialPatientProcess/Update", $("#frm_update").serialize(), function (res) {
+            btn_modify.ladda('stop');
+            if (res.result == 1) {
+                table.ajax.reload();
+                $("#model_update").modal('hide');
+                toastr.success("修改成功!");
+                $("#model_update").on("hidden.bs.modal", function () {
+                    $("input,select").val("");
+                });
+            } else if (res.result == 100) {
+                location.href = "/Home/Index";
+            } else if (res.result == 300) {
+                location.href = "/Home/Illegal";
+            } else {
+                toastr.warning(res.msg);
+            }
+        })
+    })
+
+    function deleteModelShow(model) {
+        swal({
+            title: "确定删除吗?",
+            text: "删除后不可找回!",
+            type: "warning",
+            showCancelButton: true,
+            cancelButtonText: "取消",
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "确认",
+            closeOnConfirm: false
+        }, function () {
+
+            $.post("/SpecialPatientProcess/Delete/" + model, null, function (res) {
+                if (res.result == 0) {
+                    swal("删除失败!", "没用可供删除的数据", "error");
+                }
+                else if (res.result == 300) {
+                    location.href = "/Home/Illegal";
+                } else if (data.result == 100) {
+                    location.href = "/Home/Illegal"
+                }
+                else{
+                    swal("已删除!", "此条信息已从数据库中移除", "success");
+                    table.ajax.reload();
+                }
+            });
+        });
+    }
+
+    function searchModelShow() {
+
+        $("#model_search").modal('show');
+    }
+
+    function searchSubmit() {
+        filter = "?"+$("#frm_search").serialize();
+        
+        table.ajax.reload();
+        $("#model_search").modal('hide');
+    }
+</script>
+}

@@ -1,0 +1,429 @@
+﻿@using HTNResp.Model
+<div class="row wrapper wrapper-content">
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h5>医学资料管理</h5>
+            <div class="ibox-tools">
+                <a class="btn btn-xs btn-primary" onclick="window.location.reload()">刷新</a>
+                <a class="btn btn-xs btn-primary" onclick="createModelShow()">新建</a>
+            </div>
+        </div>
+        <div class="ibox-content">
+            <p id="ptest"></p>
+            <table id="data_table" class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>资料名称</th>
+                        <th>图片</th>
+                        <th>文件</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!--新建窗口-->
+<div class="modal inmodal fade" id="model_create" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title">
+                    新建
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form id="frm_create" class="form-horizontal">
+                    <div class="form-group" id="warningtips" style="visibility:hidden;">
+                        <h5 class="col-sm-10 col-sm-offset-2" style="color:Red;"></h5>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">
+                            资料名称
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="text" name="Name" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">
+                            图片
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="text" name="ImgPath" id="ImgPathssssss" class="form-control">
+                            <div class="uploader-thum-container">
+                                <input type="file" name="smallImg" id="ImgPath" style="display:none" onchange="preImg(this.id,'smallImg','ImgPathssssss');" readonly />
+                                <img onclick="javascript:$('#ImgPath').click();" src="/Contents/INSPINIA/img/addFeedBack.png" style="width: 75px; height: 75px;" id="smallImg" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">
+                            文件
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="text" name="FilePath" id="FilePathsssss" class="form-control">
+                            <div class="uploader-thum-container">
+                                <input type="file" name="filepaht" id="FilePath" onchange="preImg(this.id,'filepaht','FilePathsssss');" readonly />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">
+                    关闭
+                </button>
+                <button type="button" id="btn_submit" class="btn btn-primary" onclick="createSubmit()">
+                    保存
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--修改窗口-->
+<div class="modal inmodal fade" id="model_Update" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title">
+                    修改
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form id="frm_update" class="form-horizontal">
+                    <div class="form-group" id="warningtips" style="visibility:hidden;">
+                        <h5 class="col-sm-10 col-sm-offset-2" style="color:Red;"></h5>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"></label>
+                        <div class="col-sm-10"><input id="Update_ID" type="hidden" name="ID" class="form-control"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">
+                            资料名称
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="text" id="Update_Name" name="Name" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">
+                            图片
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="text" id="Update_ImgPath" name="ImgPath" class="form-control">
+                            <div class="uploader-thum-container">
+                                <input type="file" name="smallImgs" id="ImgPaths" style="display:none" onchange="preImg(this.id,'smallImgs','Update_ImgPath');" readonly />
+                                <img onclick="javascript:$('#ImgPaths').click();" src="/Contents/INSPINIA/img/addFeedBack.png" style="width: 75px; height: 75px;" id="smallImgs" />
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">
+                            文件
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="text" id="Update_FilePath" name="FilePath" class="form-control">
+                            <div class="uploader-thum-container">
+                                <input type="file" id="FilePaths" name="tttttt" onchange="preImg(this.id,'FilePaths','Update_FilePath');" readonly />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">
+                    关闭
+                </button>
+                <button type="button" class="btn btn-primary" onclick="UpdateSubmit()">
+                    保存
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section script {
+    <script>
+        //清空图片预览
+        function clearImg() {
+            $("#smallImg").attr("src", "/Contents/INSPINIA/img/addFeedBack.png");
+        }
+        //图片预览
+        function preImg(sourceId, targetId, temp) {
+            if (typeof FileReader === 'undefined') {
+                alert('Your browser does not support FileReader...');
+                return;
+            }
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                var img = document.getElementById(targetId);
+                img.src = this.result;
+            }
+            var files = document.getElementById(sourceId).files;
+            if (files.length > 0)
+                reader.readAsDataURL(files[0]);
+            else {
+                $("#" + targetId).attr("src", "/Contents/INSPINIA/img/addFeedBack.png");
+            }
+
+            $.ajaxFileUpload
+                ({
+                    url: "/SubtMedicineDetail/UploadFile", //用于文件上传的服务器端请求地址
+                    async: true,
+                    secureuri: false, //一般设置为false
+                    //fileElementId: 'uploadfile1', //修改前代码
+                    fileElementId: [sourceId], //已数组方式存储 input Id
+                    dataType: 'json', //返回值类型 一般设置为json
+                    //不能用success，否则不执行
+                    complete: function (data) {
+                        try { data = jQuery.parseJSON(data.responseXML.documentElement.innerText); } catch (e) { data = jQuery.parseJSON(data.responseXML.documentElement.textContent); }
+                        console.log(data);
+                        $("#" + temp).val(data.url);
+                    }
+                });
+
+        }
+        var filter = " ";
+        var table = null;
+        $.extend($.validator.messages, { required: '该项不能为空' });
+
+        $(document).ready(function () {
+            table = $("#data_table").DataTable({
+                "pageLength": 10,
+                "lengthChange": false,
+                "processing": true,
+                "serverSide": true,
+                "ordering": false,
+                "dom": '',
+                "ajax": function (tdata, callback, settings) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/SubtMedicineDetail/AjaxList/" + filter,
+                        cache: false,
+                        data: tdata,
+                        dataType: "json",
+                        success: function (res) {
+                            if (res.result == 0) {
+                                toastr.warning(res.msg);
+                            } else if (res.result == 100) {
+                                location.href = "/Home/Index";
+                            } else if (res.result == 300) {
+                                location.href = "/Home/Illegal";
+                            } else {
+                                callback(res.data);
+                            }
+                        },
+                        error: function (XMLHttpRequest, txtStatus, errorThrown) {
+                            toastr.warning('查询失败，请重试');
+                        }
+                    });
+                },
+                "columns": [
+                    {
+                        data: "ID",
+                        "render": function (data, type, row) {
+                            var html;
+                            html = "<div style='height:40px;overflow:auto'>" + data + "</div>";
+                            return html;
+                        }
+                    },
+                    { data: "Name" },
+                    {
+                        data: "ImgPath", "render": function (data, type, row) {
+                            if (data)
+                                return "<a href=" + data + " target='_blank'> <img src=" + data + " style='width: 75px; height: 75px;'/></a>";
+                            else
+                                return "无";
+                        }
+                    },
+                    {
+                        data: "FilePath", "render": function (data, type, row) {
+                            if (data)
+                                return "<a download='file' href=" + data + " target='_blank'>" + data + "</a>";
+                            else
+                                return "无";
+                        }
+                    },
+                    {
+                        data: "ID",
+                        "render": function (data, type, row) {
+                            ;
+                            var html;
+                            html = "<a class='btn btn-xs btn-primary' onclick='UpdateModelShow(" + data + ")'>修改</a>";
+                            html += "&nbsp;<a class='btn btn-xs btn-danger'onclick='DeleteModelShow(" + data + ")' >删除</a>";
+                            return html;
+                        }
+                    }
+                ],
+                "language": {
+                    "sProcessing": "处理中...",
+                    "sLengthMenu": "每页显示 _MENU_ 项结果",
+                    "sZeroRecords": "没有匹配结果",
+                    "sInfo": "当前显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                    "sInfoEmpty": "当前显示第 0 至 0 项结果，共 0 项",
+                    "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                    "sInfoPostFix": "",
+                    "sSearch": "关键字搜索:",
+                    "sUrl": "",
+                    "sEmptyTable": "表中数据为空",
+                    "sLoadingRecords": "载入中...",
+                    "sInfoThousands": ",",
+                    "oPaginate": {
+                        "sFirst": "首页",
+                        "sPrevious": "上页",
+                        "sNext": "下页",
+                        "sLast": "末页"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": 以升序排列此列",
+                        "sSortDescending": ": 以降序排列此列"
+                    }
+                },
+                "buttons": []
+            })
+            $("#frm_create").validate({});
+            $("#frm_update").validate({});
+        });
+        //新建
+        function createModelShow() {
+            $("#model_create").modal('show');
+
+        }
+        var ps = $('#btn_submit').ladda();
+        ps.click(function () {
+            // todo form必填项验证
+            // jquery.validate.min.js
+            if (!$("#frm_create").valid()) {
+                toastr.error("新建失败");
+                return false;
+            }
+            ps.ladda('start');
+            // todo ajax提交到服务器
+            $.post("/SubtMedicineDetail/Create", $("#frm_create").serialize(), function (res) {
+                ps.ladda('stop');
+                if (res.result == 1) {
+                    table.ajax.reload();
+                    $("#model_create").modal('hide');
+                    $("#model_create").on("hidden.bs.modal", function () {
+                        $("input,select").val("");
+                    });
+                    toastr.success("新建成功");
+                    window.location.reload();
+                } else if (res.result == 100) {
+                    location.href = "/Home/Index";
+                } else if (res.result == 300) {
+                    location.href = "/Home/Illegal";
+                }
+                else {
+                    toastr.warning("新建失败");
+                }
+            })
+
+
+        })
+        //修改
+        function UpdateModelShow(id) {
+            $.post("/SubtMedicineDetail/Info/" + id, null, function (res) {
+                if (res.result == 0) {
+                    toastr.error("所选择项不存在,请刷新后重试");
+                } else if (res.result == 100) {
+                    location.href = "/Home/Index";
+                } else if (res.result == 300) {
+                    location.href = "/Home/Illegal";
+                }
+                else {
+                    $("#Update_FilePath").val(res.data.FilePath);
+                    $("#Update_Name").val(res.data.Name);
+                    $("#Update_ImgPath").val(res.data.ImgPath);
+                    if (res.data.ImgPath)
+                        $("#smallImgs").attr('src', res.data.ImgPath);
+                    $("#Update_ID").val(res.data.ID);
+                }
+            })
+            $("#model_Update").modal('show');
+
+        }
+        function UpdateSubmit() {
+            // todo form必填项验证
+            // jquery.validate.min.js
+            if (!$("#frm_update").valid()) {
+                toastr.error("修改失败");
+                return false;
+            }
+            $.post("/SubtMedicineDetail/Update", $("#frm_update").serialize(), function (res) {
+                if (res.result == 1) {
+                    table.ajax.reload();
+                    $("#model_Update").modal('hide');
+                    toastr.success("修改成功");
+                    window.location.reload();
+                } else if (res.result == 100) {
+                    location.href = "/Home/Index";
+                } else if (res.result == 300) {
+                    location.href = "/Home/Illegal";
+                } else {
+                    toastr.error(res.msg);
+                }
+            });
+
+        }
+        //删除
+        function DeleteModelShow(model) {
+            swal({
+                title: "确定删除吗?",
+                text: "删除后不可找回!",
+                type: "warning",
+                showCancelButton: true,
+                cancelButtonText: "取消",
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "确认",
+                closeOnConfirm: false
+            }, function () {
+                //表单提交
+
+                $.post("/SubtMedicineDetail/Delete/" + model, null, function (res) {
+                    if (res.result == 0) {
+                        swal("删除失败!", "没用可供删除的数据", "error");
+                    }
+                    else if (res.result == 100) {
+                        location.href = "/Home/Index";
+                    } else if (res.result == 300) {
+                        location.href = "/Home/Illegal";
+                    } else {
+                        table.ajax.reload();
+                        swal("已删除!", "此条信息已从数据库中移除", "success");
+                    }
+                });
+
+
+            });
+
+        }
+        //查找
+        function SearchModelShow() {
+
+            $("#model_Search").modal('show');
+        }
+
+        function SearchSubmit() {
+            // todo read input box and get filter string
+            filter = "?DecisionRule=" + $("#Search_DecisionRule").val() + "&Contents=" + $("#Search_Contents").val() + "&Sex=" + $("#Search_Sex").val() + "&Remark=" + $("#Search_Remark").val() + "&EvalGuidId=" + $("#Search_EvalGuidId").val();
+            table.ajax.reload();
+            $("#model_Search").modal('hide');
+        }
+    </script>
+}

@@ -1,0 +1,418 @@
+﻿@using HTNResp.Model
+<div class="row wrapper wrapper-content">
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h5>用户管理</h5>
+            <div class="ibox-tools">
+                <a class="btn btn-xs btn-primary" onclick="window.location.reload()">刷新</a>
+                <a class="btn btn-xs btn-primary" onclick="createModelShow()">新建</a>
+            </div>
+        </div>
+        <div class="ibox-content">
+            <p id="ptest"></p>
+            <table id="data_table" class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>用户ID</th>
+                        <th>用户昵称</th>
+                        <th>用户账号</th>
+                        <th>用户密码</th>
+                        <th>用户权限</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+<!--新建窗口-->
+<div class="modal inmodal fade" id="model_create" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title">
+                    新建用户
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form id="frm_create" class="form-horizontal">
+                    <div class="form-group" id="warningtips" style="visibility:hidden;">
+                        <h5 class="col-sm-10 col-sm-offset-2" style="color:Red;"></h5>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">
+                            账号
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="text" name="UserCode" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">
+                            密码
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="text" name="Password" value="123456" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">
+                            昵称
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="text" name="UserName" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">分配权限</label>
+
+                        <div class="col-sm-10">
+                            @foreach (var item in ViewBag.AccessList)
+                            {
+                                <div class="i-checks"><label> <input type="checkbox" name="authIds" value="@item.ID"> <i></i>@item.TableName</label></div>
+                            }
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">
+                    关闭
+                </button>
+                <button type="button" id="btn_submit" class="btn btn-primary" onclick="createSubmit()">
+                    保存
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--修改窗口-->
+<div class="modal inmodal fade" id="model_Update" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title">
+                    修改
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form id="frm_update" class="form-horizontal">
+                    <div class="form-group" id="warningtips" style="visibility:hidden;">
+                        <h5 class="col-sm-10 col-sm-offset-2" style="color:Red;"></h5>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"></label>
+                        <div class="col-sm-10"><input id="Update_ID" type="hidden" name="ID" class="form-control"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">
+                            账号
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="text" id="Update_UserCode" name="UserCode" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">
+                            密码
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="text" id="Update_Password" name="Password" value="123456" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">
+                            昵称
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="text" id="Update_UserName" name="UserName" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">分配权限</label>
+
+                        <div class="col-sm-10">
+                            @foreach (var item in ViewBag.AccessList)
+            {
+                <div class="i-checks"><label> <input type="checkbox" name="authIdss" id="auth-@item.ID" value="@item.ID"> <i></i>@item.TableName</label></div>
+}
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">
+                    关闭
+                </button>
+                <button type="button" class="btn btn-primary" onclick="UpdateSubmit()">
+                    保存
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section script {
+    <script>
+        var filter = " ";
+        var table = null;
+        var  jsonString = ("@ViewBag.EvalGridUserAuth").replace(/&quot;/g,"\"");
+        var auth = jQuery.parseJSON(jsonString);
+        console.log(auth)
+
+        $.extend($.validator.messages, { required: '该项不能为空' });
+
+        $(document).ready(function () {
+            table = $("#data_table").DataTable({
+                "pageLength": 10,
+                "lengthChange": false,
+                "processing": true,
+                "serverSide": true,
+                "ordering": false,
+                "dom": '< l < t > ip > ',
+                "ajax": function (tdata, callback, settings) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/UserList/AjaxList/" + filter,
+                        cache: false,
+                        data: tdata,
+                        dataType: "json",
+                        success: function (res) {
+                            if (res.result == 0) {
+                                toastr.warning(res.msg);
+                            } else if (res.result == 100) {
+                                location.href = "/Home/Index";
+                            } else if (res.result == 300) {
+                                location.href = "/Home/Illegal";
+                            } else {
+                                callback(res.data);
+                            }
+                        },
+                        error: function (XMLHttpRequest, txtStatus, errorThrown) {
+                            toastr.warning('查询失败，请重试');
+                        }
+                    });
+                },
+                "columns": [
+                    {
+                        data: "ID",
+                        "render": function (data, type, row) {
+                            var html;
+                            html = "<div style='height:40px;overflow:auto'>" + data + "</div>";
+                            return html;
+                        }
+                    },
+                    { data: "UserName" },
+                    { data: "UserCode" },
+                    { data: "Password" },
+                    {
+                        data: "ID",
+                        "render": function (data, type, row) {
+                            var userId = data;
+                            var html = auth.filter(item => { return item.UserID == userId }).map(item => { return item.TableName }).join(',')
+                            return userId==1?"超级管理员": html;
+                        }
+                    },
+                    {
+                        data: "ID",
+                        "render": function (data, type, row) {;
+                            var html;
+                            var ids = auth.filter(item => { return item.UserID == data }).map(item => { return item.TableID });
+
+                            html = "<a class='btn btn-xs btn-primary' onclick='UpdateModelShow(" + data + "," + JSON.stringify(ids) + ")'>修改</a>";
+                            html += "&nbsp;<a class='btn btn-xs btn-danger'onclick='DeleteModelShow(" + data + ")' >删除</a>";
+                            return html;
+                        }
+                    }
+                ],
+                "language": {
+                    "sProcessing": "处理中...",
+                    "sLengthMenu": "每页显示 _MENU_ 项结果",
+                    "sZeroRecords": "没有匹配结果",
+                    "sInfo": "当前显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                    "sInfoEmpty": "当前显示第 0 至 0 项结果，共 0 项",
+                    "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                    "sInfoPostFix": "",
+                    "sSearch": "关键字搜索:",
+                    "sUrl": "",
+                    "sEmptyTable": "表中数据为空",
+                    "sLoadingRecords": "载入中...",
+                    "sInfoThousands": ",",
+                    "oPaginate": {
+                        "sFirst": "首页",
+                        "sPrevious": "上页",
+                        "sNext": "下页",
+                        "sLast": "末页"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": 以升序排列此列",
+                        "sSortDescending": ": 以降序排列此列"
+                    }
+                },
+                "buttons": []
+            })
+            $("#frm_create").validate({});
+            $("#frm_update").validate({});
+        });
+        //新建
+        function createModelShow() {
+            $("#model_create").modal('show');
+
+        }
+        var ps = $('#btn_submit').ladda();
+        ps.click(function () {
+            // todo form必填项验证
+            // jquery.validate.min.js
+            if (!$("#frm_create").valid()) {
+                toastr.error("新建失败");
+                return false;
+            }
+            ps.ladda('start');
+            var ids = "", str = "";
+            $("input[name='authIds']:checkbox").each(function () {
+                if (true == $(this).is(':checked')) {
+                    str += $(this).val() + ",";
+                }
+            });
+            if (str.substr(str.length - 1) == ',') {
+                ids = str.substr(0, str.length - 1);
+            }
+            console.log(ids);
+            // todo ajax提交到服务器
+            $.post("/UserList/Create", $("#frm_create").serialize()+"&authIdsa="+ids, function (res) {
+                ps.ladda('stop');
+                if (res.result == 1) {
+                    table.ajax.reload();
+                    $("#model_create").modal('hide');
+                    $("#model_create").on("hidden.bs.modal", function () {
+                        $("input,select").val("");
+                    });
+                    toastr.success("新建成功");
+                    window.location.reload();
+                } else if (res.result == 100) {
+                    location.href = "/Home/Index";
+                } else if (res.result == 300) {
+                    location.href = "/Home/Illegal";
+                }
+                else {
+                    toastr.warning("新建失败");
+                }
+            })
+
+
+        })
+        //修改
+        function UpdateModelShow(id, ids) {
+            $.post("/UserList/Info/" + id, null, function (res) {
+                if (res.result == 0) {
+                    toastr.error("所选择项不存在,请刷新后重试");
+                } else if (res.result == 100) {
+                    location.href = "/Home/Index";
+                } else if (res.result == 300) {
+                    location.href = "/Home/Illegal";
+                }
+                else {
+                    $("#Update_UserName").val(res.data.UserName);
+                    $("#Update_UserCode").val(res.data.UserCode);
+                    $("#Update_Password").val(res.data.Password);
+                    $("#Update_ID").val(res.data.ID);
+                    
+                    for (var i = 0; i < ids.length; i++) {
+                        $("#auth-" +ids[i]).attr("checked", "true");
+                    }
+                }
+            })
+            $("#model_Update").modal('show');
+
+        }
+        function UpdateSubmit() {
+            // todo form必填项验证
+            // jquery.validate.min.js
+            if (!$("#frm_update").valid()) {
+                toastr.error("修改失败");
+                return false;
+            }
+            var ids = "", str = "";
+            $("input[name='authIdss']:checkbox").each(function () {
+                if (true == $(this).is(':checked')) {
+                    str += $(this).val() + ",";
+                }
+            });
+            if (str.substr(str.length - 1) == ',') {
+                ids = str.substr(0, str.length - 1);
+            }
+            console.log(ids);
+            $.post("/UserList/Update", $("#frm_update").serialize() + "&authIdsa=" + ids, function (res) {
+                if (res.result == 1) {
+                    table.ajax.reload();
+                    $("#model_Update").modal('hide');
+                    toastr.success("修改成功");
+                    window.location.reload();
+                } else if (res.result == 100) {
+                    location.href = "/Home/Index";
+                } else if (res.result == 300) {
+                    location.href = "/Home/Illegal";
+                } else {
+                    toastr.error(res.msg);
+                }
+            });
+
+        }
+        //删除
+        function DeleteModelShow(model) {
+            swal({
+                title: "确定删除吗?",
+                text: "删除后不可找回!",
+                type: "warning",
+                showCancelButton: true,
+                cancelButtonText: "取消",
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "确认",
+                closeOnConfirm: false
+            }, function () {
+                //表单提交
+
+                $.post("/UserList/Delete/" + model, null, function (res) {
+                    if (res.result == 0) {
+                        swal("删除失败!", "没用可供删除的数据", "error");
+                    }
+                    else if (res.result == 100) {
+                        location.href = "/Home/Index";
+                    } else if (res.result == 300) {
+                        location.href = "/Home/Illegal";
+                    } else {
+                        table.ajax.reload();
+                        swal("已删除!", "此条信息已从数据库中移除", "success");
+                    }
+                });
+
+
+            });
+
+        }
+        //查找
+        function SearchModelShow() {
+
+            $("#model_Search").modal('show');
+        }
+
+        function SearchSubmit() {
+            // todo read input box and get filter string
+            filter = "?DecisionRule=" + $("#Search_DecisionRule").val() + "&Contents=" + $("#Search_Contents").val() + "&Sex=" + $("#Search_Sex").val() + "&Remark=" + $("#Search_Remark").val() + "&EvalGuidId=" + $("#Search_EvalGuidId").val();
+            table.ajax.reload();
+            $("#model_Search").modal('hide');
+        }
+    </script>
+}

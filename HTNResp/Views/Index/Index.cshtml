@@ -1,0 +1,58 @@
+﻿<div class="wrapper wrapper-content animated fadeIn">
+    <div class="p-w-md m-t-sm">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="flot-chart m-b-xl">
+                    <div class="flot-chart-content" id="main" style="height:500px;"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+
+@section script {
+    <script>
+        $(document).ready(function () {
+            var jsonString = ("@ViewBag.BigData").replace(/&quot;/g,"\"");
+            var tArray = jQuery.parseJSON(jsonString);
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('main'));
+
+            // 指定图表的配置项和数据
+            var option = {
+                color: ['#3398DB'],
+                title: {
+                    text: '辅助诊疗系统维护平台实时数据'
+                },
+                tooltip: {},
+                legend: {
+                    data: ['数据']
+                },
+                xAxis: {
+                    data: tArray.map(item => { return item.name }),
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 40
+                    }
+                },
+                grid: {
+                    left: '10%',
+                    bottom: '35%'
+                },
+                yAxis: {},
+                series: [{
+                    name: '数据',
+                    type: 'bar',
+                    data: tArray.map(item => { return item.rows })
+                }]
+            };
+
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+        });
+    </script>
+}

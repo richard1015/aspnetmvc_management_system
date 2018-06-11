@@ -1,0 +1,205 @@
+﻿<style type="text/css">
+    input:read-only,textarea:read-only{
+        background-color:transparent;
+    }
+
+
+</style>
+
+<div class="row wrapper wrapper-content">
+    <div class="ibox float-e-margins">
+        <div class="ibox-title" >
+            <h5 id="title"></h5>
+            
+        </div>
+        <div class="ibox-content">
+            <div class="hr-line-dashed"></div>
+            <form id="frm_modify" class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-md-1 control-label">通用名</label>
+                    <div class="col-md-3"><input type="text" id="commonname" name="CommonName" class="form-control"></div>
+                    <label class="col-md-1 control-label">每次剂量</label>
+                    <div class="col-md-3"><input type="text" id="dose" name="Dose" class="form-control"></div>
+                    <label class="col-md-1 control-label">每日次</label>
+                    <div class="col-md-3"><input type="text" id="usage" name="Usage" class="form-control"></div>
+                </div>           
+                <div class="form-group">
+                    <label class="col-sm-1 control-label">类名</label>
+                    <div class="col-md-2">
+                        <select class="form-control" id="classname" name="ClassName">
+                            <option value="" disabled selected>请选择</option>
+                            <option value="钙拮抗剂">钙拮抗剂</option>
+                            <option value="ACEI">ACEI</option>
+                            <option value="ARB">ARB</option>
+                            <option value="利尿剂">利尿剂</option>
+                            <option value="β受体阻滞剂">β受体阻滞剂</option>
+                            <option value="复方制剂">复方制剂</option>
+                        </select>
+                    </div>
+                    <label class="col-sm-1 control-label">类别</label>
+                    <div class="col-md-2">
+                        <select class="form-control" id="classcode" name="ClassCode">
+                            <option value="" disabled selected>请选择</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="F">F</option>
+                        </select>
+                    </div>
+                    <label class="col-sm-1 control-label">详细类名</label>
+                    <div class="col-md-2">
+                        <select class="form-control" id="classnamedetail" name="ClassNameDetail">
+                            <option value="" disabled selected>请选择</option>
+                            <option value="钙拮抗剂二氢吡啶类">钙拮抗剂二氢吡啶类</option>
+                            <option value="ACEI">ACEI</option>
+                            <option value="ARB">ARB</option>
+                            <option value="利尿剂噻嗪类">利尿剂噻嗪类</option>
+                            <option value="β受体阻滞剂">β受体阻滞剂</option>
+                            <option value="复方制剂">复方制剂</option>
+                        </select>
+                    </div>
+                    <label class="col-sm-1 control-label">效果类别</label>
+                    <div class="col-md-2">
+                        <select class="form-control" id="effectcategory" name="EffectCategory">
+                            <option value="" disabled selected>请选择</option>
+                            <option value="短效">短效</option>
+                            <option value="中效">中效</option>
+                            <option value="长效">长效</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-1 control-label">适应症</label>
+                    <div class="col-md-11">
+                        <textarea class="form-control" id="indications" name="Indications" rows="3" style="overflow-x:hidden;resize:none"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-1 control-label">禁忌症</label>
+                    <div class="col-md-11">
+                        <textarea class="form-control" id="contraindications" name="Contraindications" rows="3" style="overflow-x:hidden;resize:none"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-1 control-label">主要不良反应</label>
+                    <div class="col-md-11">
+                        <textarea class="form-control" id="adversereaction" name="AdverseReaction" rows="3" style="overflow-x:hidden;resize:none"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-1 control-label">备注</label>
+                    <div class="col-md-11">
+                        <textarea class="form-control" id="remark" name="Remark" rows="3" style="overflow-x:hidden;resize:none"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                        <label class="col-sm-2 control-label"></label>
+                        <div class="col-sm-10"><input id="id" type="hidden" name="ID" class="form-control"></div>
+                    </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                        <a class="btn btn-md btn-default col-sm-4 col-sm-offset-1" onclick="backward()">返回</a>
+                        <a class="btn btn-md btn-primary col-sm-4 col-sm-offset-2" id="btn_modify" onclick="modify()">修改</a>
+               </div>
+            </form>
+            
+        </div>
+    </div>
+</div>
+
+@section script {
+    <script type="text/javascript">
+        var status = -1;
+        $(document).ready(function () {
+            id = getUrlParam('id')
+            status = getUrlParam('status');
+            if (status == 0) {
+                $("#title").html("基层常见药物明细");
+                $("input,textarea,select").attr('readonly', 'true');
+                $("input:read-only,textarea:read-only,select:read-only").css("background-color", "white");
+                $("#btn_modify").css('visibility', 'hidden');
+            }
+            if (status == 2) {
+                $("#title").html("基层常见药物新建");
+                $("#btn_modify").html("添加");
+                $("#commonname").val("");
+                $("#dose").val("");
+                $("#usage").val("");
+                $("#classname").val("");
+                $("#classcode").val("");
+                $("#classnamedetail").val("");
+                $("#effectcategory").val("");
+                $("#indications").val("");
+                $("#contraindications").val("");
+                $("#adversereaction").val("");
+                $("#remark").val("");
+                $("#id").val("");
+            } else {
+                if (status == 1)
+                    $("#title").html("基层常见药物修改");
+                $.post("/GrassRoots/Info/?id=" + id, null, function (res) {
+                    if (res.result == 0) {
+                        toastr.error(res.msg);
+                    }
+                    else if (res.result == 100) {
+                        location.href = "/Home/Index";
+                    } else if (res.result == 300) {
+                        location.href = "/Home/Illegal";
+                    } else {
+                        $("#commonname").val(res.data.CommonName);
+                        $("#dose").val(res.data.Dose);
+                        $("#usage").val(res.data.Usage);
+                        $("#classname").val(res.data.ClassName);
+                        $("#classcode").val(res.data.ClassCode);
+                        $("#classnamedetail").val(res.data.ClassNameDetail);
+                        $("#effectcategory").val(res.data.EffectCategory);
+                        $("#indications").val(res.data.Indications);
+                        $("#contraindications").val(res.data.Contraindications);
+                        $("#adversereaction").val(res.data.AdverseReaction);
+                        $("#remark").val(res.data.Remark);
+                        $("#id").val(res.data.ID);
+                    }
+                })
+            }
+        });
+        function getUrlParam(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+            var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+            if (r != null) return unescape(r[2]); return null; //返回参数值
+        }
+        function backward() {
+            location.href = '/GrassRoots/Index'
+        }
+
+        function modify() {
+            if(status==1)
+                $.post("/GrassRoots/Update", $("#frm_modify").serialize(), function (res) {
+                    if (res.result == 0) {
+                        toastr.warning(data.msg);
+                    }
+                    else if (res.result == 100) {
+                        location.href = "/Home/Index";
+                    } else if (res.result == 300) {
+                        location.href = "/Home/Illegal";
+                    } else {
+                        toastr.success("修改成功");
+                    }
+                })
+            else
+                $.post("/GrassRoots/Create", $("#frm_modify").serialize(), function (res) {
+                    if (res.result == 0) {
+                        toastr.warning(data.msg);
+                    }
+                    else if (res.result == 100) {
+                        location.href = "/Home/Index";
+                    } else if (res.result == 300) {
+                        location.href = "/Home/Illegal";
+                    } else {
+                        toastr.success("添加成功");
+                    }
+                })
+
+        }
+    </script>
+}

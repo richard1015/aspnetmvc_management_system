@@ -1,0 +1,205 @@
+﻿<style type="text/css">
+    .input-xs {
+  height: 22px;
+  padding: 2px 5px;
+  font-size: 12px;
+  line-height: 1.5; /* If Placeholder of the input is moved up, rem/modify this. */
+  border-radius: 3px;
+}
+
+
+</style>
+<div class="row wrapper wrapper-content">
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+        <div><h5 >基层常见药物维护</h5></div>
+            <div class="ibox-tools">
+                <form id="frm_search" class="form-horizontal">
+             <div class="input-group col-md-offset-7">
+                <label class="col-md-2 control-label-xs">
+                    查询</label>
+                <div class="col-md-5">
+                    <input type="text" class="form-control input-xs" name="search" placeholder="通用名" id="search_content" >
+                </div>
+                <div class="col-md-5">
+                    <a class="btn btn-xs btn-primary" id="btn_search">
+                        查询</a>&nbsp;
+                    <a class="btn btn-xs btn-primary" id="btn_create">
+                        新建</a>&nbsp;
+                    <a class="btn btn-xs btn-primary" id="btn_refresh">
+                        刷新</a>
+                </div>
+            </div>
+             </form>
+        </div>
+        </div>
+        <div class="ibox-content">
+        <div class="hr-line-dashed">
+            </div>
+            <table id="data_table" class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th style="width:20%">通用名</th>
+                        <th style="width:15%">使用剂量</th>
+                        <th style="width:15%">使用方法</th>
+                        <th style="width:20%">类名</th>
+                        <th style="width:5%">类别</th>
+                        <th style="width:10%">效果类别</th>
+                        <th style="width:15%">修改</th>
+                        @*<th style="width:10%">评估指南</th>*@
+                    </tr>
+                </thead>
+            </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section script {
+<script>
+
+    var table;
+    var filter = "";
+    $(document).ready(function () {
+        table = $("#data_table").DataTable({
+            "pageLength": 10,
+            "lengthChange": false,
+            "processing": true,
+            "serverSide": true,
+            "ordering": false,
+            "dom": '< l < t > ip >',
+            "ajax": function (tdata, callback, settings) {
+                $.ajax({
+                    type: "POST",
+                    url: "/GrassRoots/Detail" + filter,
+                    cache: false,
+                    data: tdata,
+                    dataType: "json",
+                    success: function (res) {
+                        if (res.result == 0) {
+                            toastr.warning(res.msg);
+                        } else if (res.result == 100) {
+                            location.href = "/Home/Index";
+                        } else if (res.result == 300) {
+                            location.href = "/Home/Illegal";
+                        } else {
+                            callback(res.data);
+                        }
+                    },
+                    error: function (XMLHttpRequest, txtStatus, errorThrown) {
+                        toastr.warning('查询失败，请重试');
+                    }
+                });
+            },
+            "columns": [
+                    { data: "CommonName"},
+                    { data: "Dose"},
+                    { data: "Usage" },
+                    { data: "ClassName" },
+                    { data: "ClassCode" },
+                    { data: "EffectCategory" },
+                    {
+                        data: "ID",
+                        "render": function (data, type, row) {
+                            var html;
+                            html = "<a class='btn btn-xs btn-primary' onclick='detailShow(" + data + ")'>详细</a>";
+                            html += "&nbsp;<a class='btn btn-xs btn-primary'onclick='updateShow(" + data + ")' >修改</a>";
+                            html += "&nbsp;<a class='btn btn-xs btn-danger'onclick='deleteShow(" + data + ")' >删除</a>"; 
+                            return html;
+                        }
+                    }
+                ],
+            "language": {
+                "sProcessing": "处理中...",
+                "sLengthMenu": "每页显示 _MENU_ 项结果",
+                "sZeroRecords": "没有匹配结果",
+                "sInfo": "当前显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                "sInfoEmpty": "当前显示第 0 至 0 项结果，共 0 项",
+                "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                "sInfoPostFix": "",
+                "sSearch": "关键字搜索:",
+                "sUrl": "",
+                "sEmptyTable": "表中数据为空",
+                "sLoadingRecords": "载入中...",
+                "sInfoThousands": ",",
+                "oPaginate": {
+                    "sFirst": "首页",
+                    "sPrevious": "上页",
+                    "sNext": "下页",
+                    "sLast": "末页"
+                },
+                "oAria": {
+                    "sSortAscending": ": 以升序排列此列",
+                    "sSortDescending": ": 以降序排列此列"
+                }
+            },
+            "buttons": []
+        })
+    });
+
+    function detailShow(id) {
+        var status = 0;
+        location.href = "/GrassRoots/Modify?id=" + id + "&status=" + status;
+
+    }
+
+    function updateShow(id) {
+        var status = 1;
+        location.href = "/GrassRoots/Modify?id=" + id + "&status=" + status;
+
+    }
+
+    function deleteShow(id) {
+        swal({
+            title: "确定删除吗?",
+            text: "删除后不可找回!",
+            type: "warning",
+            showCancelButton: true,
+            cancelButtonText: "放弃", //取消按钮
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "删了吧!", //确认按钮
+            closeOnConfirm: false
+        }, function () {
+            //表单提交
+            $.post("/GrassRoots/Delete?id=" + id, null, function (res) {
+                if (res.result == 0) {
+                    swal("删除失败!", "没用可供删除的数据", "error");
+                }
+                else if (res.result == 100) {
+                    location.href = "/Home/Index";
+                } else if (res.result == 300) {
+                    location.href = "/Home/Illegal";
+                } else {
+                    table.ajax.reload();
+                    swal("已删除!", "此条信息已从数据库中移除", "success");
+                    
+                    
+                }
+            })
+        });
+
+    }
+    $("#btn_search").click( function(){
+         content = $("#search_content").val();
+        if (content == "") {
+            toastr.warning("请填写通用名后，再点击查询！");
+        } else {
+            filter = "?common=" + content;
+            table.ajax.reload();
+        }
+    });
+    $("#frm_search").submit(function () {
+        return false
+    });
+    $("#btn_create").click(function () {
+        var status = 2;
+        location.href = "/GrassRoots/Modify?status=" + status;
+    });
+
+    $("#btn_refresh").click(function () {
+        $("#search_content").val("");
+        filter = "";
+        table.ajax.reload();
+    });
+</script>
+}

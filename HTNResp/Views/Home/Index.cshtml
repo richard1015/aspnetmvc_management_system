@@ -1,0 +1,89 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>辅助诊疗系统维护平台</title>
+
+    <link href="/Contents/INSPINIA/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/Contents/INSPINIA/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="/Contents/INSPINIA/css/animate.css" rel="stylesheet">
+    <link href="/Contents/INSPINIA/css/style.css" rel="stylesheet">
+    <link href="/Contents/INSPINIA/css/plugins/toastr/toastr.min.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body class="gray-bg">
+
+    <div class="middle-box text-center loginscreen animated fadeInDown">
+        <div>
+            <div>
+
+                <h1 class="logo-name">IN</h1>
+
+            </div>
+            <h3>欢迎来到辅助诊疗系统维护平台</h3>
+            <h4>请登录</h4>
+            <form id="frm_login" class="m-t">
+                <div class="form-group">
+                    <input id="Username" type="text" name="Username"  class="form-control" placeholder="用户名" required/>
+                </div>
+                <div class="form-group">
+                    <input id="Password"name="Password" type="password" class="form-control" placeholder="密码" required/>
+                </div>
+                <button type="button" class="btn btn-primary block full-width m-b" id=" submit" onclick="LoginSubmit()">登录</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Mainly scripts -->
+    <script src="/Contents/INSPINIA/js/jquery-2.1.1.js"></script>
+    <script src="/Contents/INSPINIA/js/bootstrap.min.js"></script>  
+    <script src="/Contents/INSPINIA/js/plugins/toastr/toastr.min.js" type="text/javascript"></script>
+    <script src="/Contents/INSPINIA/js/plugins/validate/jquery.validate.min.js"></script>
+    <script>
+        $(document).ready(function () { 
+            var a = '@Session["status"]';
+            if(a == "-1")
+                 toastr.warning('您已在电脑上登录其他账户，请重新登录');
+        })
+        $.extend($.validator.messages, { required: '该项不能为空' });
+        $("#frm_login").validate({});
+        $("input").keydown(function (event) {
+            if (event.keyCode == 13)
+                LoginSubmit();
+        });
+        function LoginSubmit() {
+            if (!$("#frm_login").valid()) {
+                toastr.error("登录失败，请检查用户名和密码");
+                return false;
+            }
+            $.ajax({
+                type: "POST",       //类型
+                url: "/Home/Login", //服务器地址
+                cache: false,
+                data: "Username=" + $("#Username").val() + "&Password=" + $("#Password").val(),              //发送给服务器的数据
+                dataType: "json",
+                success: function (res) {              //成功时触发的执行函数
+                    if (res.result == 0) {
+                        toastr.warning('登录失败，请重试');
+                        return false;
+                    } else if (res.result == -7) {
+                        location.href = "/Home/Index?status=-1";
+                    } else {
+                        window.location.href = "../Index/Index";
+                        toastr.success("登录成功");
+                        callback(res.data);    //返回查询结果值
+                    }
+                }
+            });
+
+        }
+</script>
+</body>
+</html>
