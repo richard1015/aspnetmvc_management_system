@@ -33,3 +33,9 @@ E:\HTNResp002\DBUtility\obj\Debug\HTNResp.DBUtility.pdb
 \\Mac\Home\Downloads\HTNResp002\DBUtility\obj\Debug\DBUtility.csproj.CoreCompileInputs.cache
 \\Mac\Home\Downloads\HTNResp002\DBUtility\obj\Debug\HTNResp.DBUtility.dll
 \\Mac\Home\Downloads\HTNResp002\DBUtility\obj\Debug\HTNResp.DBUtility.pdb
+Y:\github\aspnetmvc_management_system\DBUtility\bin\Debug\HTNResp.DBUtility.dll
+Y:\github\aspnetmvc_management_system\DBUtility\bin\Debug\HTNResp.DBUtility.pdb
+Y:\github\aspnetmvc_management_system\DBUtility\obj\Debug\DBUtility.csprojResolveAssemblyReference.cache
+Y:\github\aspnetmvc_management_system\DBUtility\obj\Debug\DBUtility.csproj.CoreCompileInputs.cache
+Y:\github\aspnetmvc_management_system\DBUtility\obj\Debug\HTNResp.DBUtility.dll
+Y:\github\aspnetmvc_management_system\DBUtility\obj\Debug\HTNResp.DBUtility.pdb

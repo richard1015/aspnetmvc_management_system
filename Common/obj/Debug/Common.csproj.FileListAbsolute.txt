@@ -32,3 +32,9 @@ E:\HTNResp002\Common\obj\Debug\HTNResp.Common.pdb
 \\Mac\Home\Downloads\HTNResp002\Common\obj\Debug\Common.csproj.CoreCompileInputs.cache
 \\Mac\Home\Downloads\HTNResp002\Common\obj\Debug\HTNResp.Common.dll
 \\Mac\Home\Downloads\HTNResp002\Common\obj\Debug\HTNResp.Common.pdb
+Y:\github\aspnetmvc_management_system\Common\bin\Debug\HTNResp.Common.dll
+Y:\github\aspnetmvc_management_system\Common\bin\Debug\HTNResp.Common.pdb
+Y:\github\aspnetmvc_management_system\Common\obj\Debug\Common.csprojResolveAssemblyReference.cache
+Y:\github\aspnetmvc_management_system\Common\obj\Debug\Common.csproj.CoreCompileInputs.cache
+Y:\github\aspnetmvc_management_system\Common\obj\Debug\HTNResp.Common.dll
+Y:\github\aspnetmvc_management_system\Common\obj\Debug\HTNResp.Common.pdb
